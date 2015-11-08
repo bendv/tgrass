@@ -26,11 +26,11 @@
 ##
 ## notes:
 ##    - this script must be run in the command line from within a GRASS session
-##    - search_path contains subfolders for each scene (with appropriate names)
-##    - .tif format is assumed for input files (uses r.in.gdal)
+##	  - search_path contains subfolders for each scene (with appropriate names)
+##	  - .tif format is assumed for input files (uses r.in.gdal)
 ##    - .tif filenames must contain standard Landsat scene ID strings (see ?bfastSpatial::getSceneinfo)
-##    - the script assumes that a LOCATION set up
-##    - this script will then create the strds in LOCATION and import raster maps into the PERMANENT mapset and register to the strds
+##	  - the script assumes that a LOCATION set up
+##	  - this script will then create the strds in LOCATION and import raster maps into the PERMANENT mapset and register to the strds
 ##    - individual map names in the strds consist of the Landsat sceneID + '_' + pattern
 ##
 ##-------------------------------------------------------------------------------------------------------------------------------------
@@ -39,29 +39,29 @@ args <- commandArgs(trailingOnly = TRUE)
 path <- args[1]
 pattern <- args[2]
 strds <- args[3]
-title <- paste("\'", args[4], "\'", sep = '')
-desc <- paste("\'", args[5], "\'", sep = '')
+title <- sprintf("\'%s\'", args[4])
+desc <- sprintf("\'%s\'", args[5])
 cpus <- as.numeric(args[6])
-if(length(args) > 6 & args[7] == 'overwrite') {
+if(length(args) > 6 & args[7] == "overwrite") {
   overwrite = TRUE
 } else {
   overwrite = FALSE
 }
 
-cat('\n#############################\n')
-cat('Creating ', strds, ' and registering all ', pattern, ' scenes in ', path, '.\n', sep = '')
-cat('#############################\n\n')
+cat("\n#############################\n")
+cat("Creating ", strds, " and registering all ", pattern, " scenes in ", path, ".\n", sep = "")
+cat("#############################\n\n")
 
 library(bfastSpatial)
 library(spgrass6)
 setwd(path)
-loc <- Sys.setlocale('LC_TIME', 'en_US.utf-8')
+loc <- Sys.setlocale("LC_TIME", "en_US.utf-8")
 
 # create the strds
 if(overwrite) {
-  command <- paste('t.create --o type=strds temporaltype=absolute output=', strds, ' title=', title, ' description=', desc, sep = '')
+  command <- sprintf("t.create --o type=strds temporaltype=absolute output=%s title=%s description=%s", strds, title, desc)
 } else {
-  command <- paste('t.create type=strds temporaltype=absolute output=', strds, ' title=', title, ' description=', desc, sep = '')
+  command <- sprintf("t.create type=strds temporaltype=absolute output=%s title=%s description=%s", strds, title, desc)
 }
 system(command)
 
@@ -70,20 +70,20 @@ fl <- list.files()
 s <- getSceneinfo(fl)
 
 # format dates for r.datestamp
-dates <- tolower(format(s$date, format = '%d %b %Y'))
+dates <- tolower(format(s$date, format = "%d %b %Y"))
 
 # function for batch import and timestamping of raster maps
 r.in.gdal.timestamp <- function(r, name, date) {
   if(overwrite) {
-    execGRASS('r.in.gdal', parameters = list(input = r, output = name), flags = c("overwrite"))
+    execGRASS("r.in.gdal", parameters = list(input = r, output = name), flags = c("overwrite"))
   } else {
-    execGRASS('r.in.gdal', parameters = list(input = r, output = name))
+    execGRASS("r.in.gdal", parameters = list(input = r, output = name))
   }
-  execGRASS('r.timestamp', parameters = list(map = name, date = date))
+  execGRASS("r.timestamp", parameters = list(map = name, date = date))
 }
 
 # list all .tif files (with pattern (e.g. all blue band))
-srch <- glob2rx(paste('*', pattern, '*.tif', sep = ''))
+srch <- glob2rx(sprintf("*%s*.tif", pattern))
 files <- list.files(pattern = srch, recursive = TRUE)
 
 # apply function over all scenes
@@ -96,29 +96,29 @@ if(cpus == 1) {
   library(doMC)
   registerDoMC(cores = cpus)
   junk <- foreach(i = 1:length(fl)) %dopar% {
-    label <- paste(row.names(s)[i], "_", pattern, sep='')
+    label <- sprintf("%s_%s", row.names(s)[i], pattern)
     r.in.gdal.timestamp(files[i], label, dates[i])
   }
 }
 
 # write .txt with start and end times for registering the raster maps to the 
-sname <- paste(row.names(s), "_", pattern, sep = '')
+sname <- sprintf("%s_%s", row.names(s), pattern)
 start_date <- as.character(s$date)
 end_date <- as.character(s$date + 1) # 1 day later
-lines <- paste(sname, start_date, end_date, sep = '|')
-fileConn <- file('scenes_time.txt', open = 'w')
+lines <- sprintf("%s|%s|%s", sname, start_date, end_date)
+fileConn <- file('scenes_time.txt', open = "w")
 writeLines(lines, fileConn)
 close(fileConn)
 
 # register all scenes in the strds
 if(overwrite) {
-  command <- paste('t.register --o input=', strds, ' file=scenes_time.txt', sep='')
+  command <- sprintf("t.register --o input=%s file=scenes_time.txt", strds)
 } else {
-  command <- paste('t.register input=', strds, ' file=scenes_time.txt', sep='')
+  command <- sprintf("t.register input=%s file=scenes_time.txt", strds)
 }
 system(command)
 junk <- file.remove('scenes_time.txt')
 
 # show info
-system(paste('t.info type=strds input=', strds, sep = ''))
-cat('\n\nFinished.')
+system(sprintf("t.info type=strds input=%s", strds))
+cat("\n\nFinished.")
