@@ -26,11 +26,11 @@
 ##
 ## notes:
 ##    - this script must be run in the command line from within a GRASS session
-##	  - search_path contains subfolders for each scene (with appropriate names)
-##	  - .tif format is assumed for input files (uses r.in.gdal)
+##    - search_path contains subfolders for each scene (with appropriate names)
+##    - .tif format is assumed for input files (uses r.in.gdal)
 ##    - .tif filenames must contain standard Landsat scene ID strings (see ?bfastSpatial::getSceneinfo)
-##	  - the script assumes that a LOCATION set up
-##	  - this script will then create the strds in LOCATION and import raster maps into the PERMANENT mapset and register to the strds
+##    - the script assumes that a LOCATION set up
+##    - this script will then create the strds in LOCATION and import raster maps into the PERMANENT mapset and register to the strds
 ##    - individual map names in the strds consist of the Landsat sceneID + '_' + pattern
 ##
 ##-------------------------------------------------------------------------------------------------------------------------------------
