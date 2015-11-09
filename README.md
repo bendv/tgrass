@@ -24,7 +24,7 @@ install_github("dutri001/bfastSpatial")
 ## Create spatio-temporal raster data set (stdrs) from a directory of .tif files
 I have a directory with .tif files representing separate SWIR2 (band 7) layers and I want to register these into a spatio-temporal raster data set using GRASS 7.
 
-![File List](https://github.com/bendv/tgrass/img/file_list.png)
+![File List](https://github.com/bendv/tgrass/blob/master/img/file_list.png)
 
 First, open up a GRASS session (assuming you have created the appriate LOCATION above)
 
