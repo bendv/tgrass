@@ -89,7 +89,7 @@ files <- list.files(pattern = srch, recursive = TRUE)
 # apply function over all scenes
 if(cpus == 1) {
   for(i in 1:length(fl)) {
-    label <- paste(row.names(s)[i], "_", pattern, sep='')
+    label <- sprintf("%s_%s", row.names(s)[i], pattern)
     r.in.gdal.timestamp(files[i], label, dates[i])
   }
 } else if(cpus > 1) {
