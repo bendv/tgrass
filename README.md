@@ -37,3 +37,7 @@ Then, run the Rscript ```create_stdrs_Landsat.R``` *within* your GRASS session a
 ```
 Rscript ./grassdata/R/create_strds_Landsat.R ./01_tif SWIR2 kafa_SWIR2 "Kafa SWIR2 LTS" "Kafa SWIR2 LTS" 10 overwrite
 ```
+
+Running ```t.info kafa_SWIR2``` for this new strds shows the following:
+
+![t.info](https://github.com/bendv/tgrass/blob/master/img/t_info.png)
