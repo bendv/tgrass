@@ -13,3 +13,10 @@ mkdir grassdata
 cd grassdata
 grass70 -c EPSG:32636 ./kafa_UTM36N
 ```
+
+## Install spgrass7 and bfastSpatial in R
+```
+install.packages("spgrass7", repos="http://R-Forge.R-project.org")
+library(devtools)
+install_github("dutri001/bfastSpatial")
+```
