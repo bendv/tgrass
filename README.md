@@ -21,7 +21,7 @@ library(devtools)
 install_github("dutri001/bfastSpatial")
 ```
 
-## Create spatio-temporal raster data set (stdrs) from a directory of .tif files
+## Create spatio-temporal raster data set (strds) from a directory of .tif files
 I have a directory with .tif files representing separate SWIR2 (band 7) layers and I want to register these into a spatio-temporal raster data set using GRASS 7.
 
 ![File List](https://github.com/bendv/tgrass/blob/master/img/file_list.png)
@@ -41,3 +41,14 @@ Rscript ./grassdata/R/create_strds_Landsat.R ./01_tif SWIR2 kafa_SWIR2 "Kafa SWI
 Running ```t.info kafa_SWIR2``` for this new strds shows the following:
 
 ![t.info](https://github.com/bendv/tgrass/blob/master/img/t_info.png)
+
+## Update an strds with newly downloaded scenes
+New scenes downloaded and still compressed (.tar.gz) can be added to an existing strds using ```update_strds_Landsat.R```
+
+```
+Rscript ./update_strds_Landsat.R kafa_SWIR2 ./00_tar/new ./01_tif SWIR2 SWIR2 1
+```
+
+The arguments are: (1) strds, (2) input directory, (3) output directory for processed layers, (4) search pattern, (5) layer tag, (6) cpus
+
+
