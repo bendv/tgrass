@@ -101,7 +101,7 @@ if(cpus == 1) {
 
 
 # register to strds
-command <- sprintf("t.register input=%s file=scenes_time.txt", stdrs)
+command <- sprintf("t.register input=%s file=scenes_time.txt", strds)
 system(command)
 junk <- file.remove("scenes_time.txt")
 
