@@ -18,7 +18,7 @@ grass70 -c EPSG:32636 ./kafa_UTM36N
 ```R
 install.packages("spgrass7", repos="http://R-Forge.R-project.org")
 library(devtools)
-install_github("dutri001/bfastSpatial")
+install_github("loicdtx/bfastSpatial")
 ```
 
 ## Create spatio-temporal raster data set (strds) from a directory of .tif files
